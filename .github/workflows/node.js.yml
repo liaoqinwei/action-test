@@ -58,9 +58,10 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
         port: ${{ secrets.SERVER_PORT }}
-        protocol: ftps-legacy
+        protocol: ftps
         local-dir: ./
         server-dir: /opt/profile/
+        timeout: 60000
         
     
     
