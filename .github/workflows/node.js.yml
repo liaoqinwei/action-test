@@ -61,7 +61,7 @@ jobs:
         protocol: ftps
         local-dir: ./
         server-dir: /opt/profile/
-        timeout: 60000
+        timeout: 180000
         
     
     
