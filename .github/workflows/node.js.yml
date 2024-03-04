@@ -47,7 +47,10 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
-    
+      
+    - name: Use build artifacts from job1
+      run: cd ${{ needs.job1.outputs.build-dir }}
+      
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
@@ -56,7 +59,7 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         port: ${{ secrets.SERVER_PORT }}
         protocol: ftps
-        local-dir: ${{ needs.job1.outputs.build-dir }}/
+        local-dir: ./
         server-dir: /opt/profile/
         
     
