@@ -29,3 +29,35 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    - name: Set output
+      id: set-output
+      run: echo "::set-output name=build-dir::dist"
+    
+  ftp-deploy:
+  
+    needs: build
+    environment: 
+      name: server-production
+      url: http://cunjiuyeshu.top
+      
+    name: 🎉 Deploy
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        port: ${{ secrets.SERVER_PORT }}
+        protocol: ftps
+        local-dir: ${{ needs.job1.outputs.build-dir }}/
+        server-dir: /opt/profile/
+        
+    
+    
