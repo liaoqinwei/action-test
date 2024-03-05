@@ -43,6 +43,10 @@ jobs:
     name: 🎉 Deploy
     
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
     
     steps:
     - name: 🚚 Get latest code
@@ -50,6 +54,14 @@ jobs:
       
     - name: Use build artifacts from job1
       run: cd ${{ needs.job1.outputs.build-dir }}
+
+    - name: Use Node.js ${{ matrix.node-version }} build project
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
       
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -59,7 +71,7 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 21
         protocol: ftp
-        local-dir: ./
+        local-dir: ./dist/
         server-dir: /opt/profile/
         timeout: 180000
         
